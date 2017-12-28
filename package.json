@@ -1,0 +1,38 @@
+{
+  "name": "node-apriori",
+  "version": "0.1.0",
+  "description": "Apriori Algorithm implementation in TypeScript / JavaScript.",
+  "main": "dist/apriori.js",
+  "types" : "dist/index.d.ts",
+  "scripts": {
+    "test": "node test.js",
+    "tsc": "./node_modules/typescript/bin/tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexisfacques/Node-Apriori.git"
+  },
+  "keywords": [
+    "apriori",
+    "algorithm",
+    "frequent",
+    "data",
+    "itemset",
+    "mining",
+    "association",
+    "rules"
+  ],
+  "author": "Alexis Facques <mail@alexisfacques.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexisfacques/Node-Apriori/issues"
+  },
+  "homepage": "https://github.com/alexisfacques/Node-Apriori#readme",
+  "devDependencies": {
+    "@types/node": "^8.5.2",
+    "typescript": "^2.6.2"
+  },
+  "dependencies": {
+    "events": "^1.1.1"
+  }
+}
