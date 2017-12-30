@@ -6,8 +6,12 @@ interface ItemsCount {
 
 export interface IAprioriEvents<T> {
     on(event: 'data', listener: (itemset: Itemset<T>) => void): this;
-    on(event: 'close', listener: (stats: any) => void): this;
     on(event: string, listener: Function): this;
+}
+
+export interface IAprioriResults<T> {
+    itemsets: Itemset<T>[],
+    executionTime: number
 }
 
 export interface Itemset<T> {
@@ -16,34 +20,45 @@ export interface Itemset<T> {
 }
 
 export class Apriori<T> extends EventEmitter implements IAprioriEvents<T> {
+    private _transactions: T[][];
 
-    constructor( private _transactions: T[][], private _support: number /*, private _confidence: number*/ ) {
+    constructor( private _support: number /*, private _confidence: number*/ ) {
         super();
     }
 
-    public exec(): any {
-        let frequentItemsets: Itemset<T>[][] = [];
+    public exec( transactions: T[][], cb?: (result: IAprioriResults<T>) => any ): Promise<IAprioriResults<T>> {
+        this._transactions = transactions;
 
-        frequentItemsets.push( this.getFrequentOneItemsets(this._transactions) );
+        return new Promise<IAprioriResults<T>>( (resolve, reject) => {
+            let time = process.hrtime();
 
-        let i: number = 0;
-        while( frequentItemsets[i].length > 0 ) {
-            frequentItemsets.push( this.getFrequentKItemsets(frequentItemsets[i]) );
-            i++;
-        }
+            // Generate frequent one-itemsets.
+            let frequentItemsets: Itemset<T>[][] = [ this.getFrequentOneItemsets(this._transactions) ];
 
-        console.log(`Algorithm stopped at size ${i}`);
+            let i: number = 0;
+            // Generate frequent (i+1)-itemsets.
+            while( frequentItemsets[i].length > 0 ) {
+                frequentItemsets.push( this.getFrequentKItemsets(frequentItemsets[i]) );
+                i++;
+            }
 
-        [].concat.apply([], frequentItemsets).forEach( (frequentItemset: Itemset<T>) => {
-            console.log(`=====\r\nItems: ${frequentItemset.items.toString()}`);
-            console.log(`Support: ${frequentItemset.support}\r\n=====`);
+            let elapsedTime = process.hrtime(time);
+
+            // Formatting results.
+            let result: IAprioriResults<T> = {
+                itemsets: [].concat.apply([], frequentItemsets),
+                executionTime: Math.round((elapsedTime[0]*1000)+(elapsedTime[1]/1000000))
+            };
+
+            if(cb) cb(result);
+            resolve(result);
         });
     }
 
     /**
      * Returns frequent one-itemsets from a given set of transactions.
      * @param  {T[][]}              transactions Your set of transactions.
-     * @return {Itemset<T>}              Frequent one-itemsets.
+     * @return {Itemset<T>}         Frequent one-itemsets.
      */
     private getFrequentOneItemsets( transactions: T[][] ): Itemset<T>[] {
         // This generates one-itemset candidates.
@@ -67,7 +82,7 @@ export class Apriori<T> extends EventEmitter implements IAprioriEvents<T> {
     /**
      * Returns frequent (k = n+1)-itemsets from a given array of frequent n-itemsets.
      * @param  {Itemset<T>[]} frequentNItemsets Previously determined n-itemsets.
-     * @return {any}                                    [description]
+     * @return {any}                            Frequent k-itemsets.
      */
     private getFrequentKItemsets( frequentNItemsets: Itemset<T>[] ): Itemset<T>[] {
         // Trivial precondition.
