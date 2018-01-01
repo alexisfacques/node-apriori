@@ -22,10 +22,28 @@ export interface Itemset<T> {
 export class Apriori<T> extends EventEmitter implements IAprioriEvents<T> {
     private _transactions: T[][];
 
+    /**
+     * Apriori is an algorithm for frequent item set mining and association rule
+     * earning over transactional databases.
+     * It proceeds by identifying the frequent individual items in the given set of transactions
+     * and extending them to larger and larger item sets as long as those item sets appear
+     * sufficiently often in the database.
+     *
+     * @param  {number} _support 0 < _support < 1. Minimum support of itemsets to mine.
+     */
     constructor( private _support: number /*, private _confidence: number*/ ) {
         super();
     }
 
+    /**
+     * Executes the Apriori Algorithm.
+     * You can keep track of frequent itemsets as they are mined by listening to the 'data' event on the Apriori object.
+     * All mined itemsets, as well as basic execution stats, are returned at the end of the execution through a callback function or a Promise.
+     *
+     * @param  {T[][]}              transactions The transactions from which you want to mine itemsets.
+     * @param  {IAprioriResults<T>} cb           Callback function returning the results.
+     * @return {Promise<IAprioriResults<T>>}     Promise returning the results.
+     */
     public exec( transactions: T[][], cb?: (result: IAprioriResults<T>) => any ): Promise<IAprioriResults<T>> {
         this._transactions = transactions;
 
@@ -57,8 +75,9 @@ export class Apriori<T> extends EventEmitter implements IAprioriEvents<T> {
 
     /**
      * Returns frequent one-itemsets from a given set of transactions.
+     *
      * @param  {T[][]}              transactions Your set of transactions.
-     * @return {Itemset<T>}         Frequent one-itemsets.
+     * @return {Itemset<T>[]}       Frequent one-itemsets.
      */
     private getFrequentOneItemsets( transactions: T[][] ): Itemset<T>[] {
         // This generates one-itemset candidates.
@@ -81,8 +100,9 @@ export class Apriori<T> extends EventEmitter implements IAprioriEvents<T> {
 
     /**
      * Returns frequent (k = n+1)-itemsets from a given array of frequent n-itemsets.
+     *
      * @param  {Itemset<T>[]} frequentNItemsets Previously determined n-itemsets.
-     * @return {any}                            Frequent k-itemsets.
+     * @return {Itemset<T>[]}                   Frequent k-itemsets.
      */
     private getFrequentKItemsets( frequentNItemsets: Itemset<T>[] ): Itemset<T>[] {
         // Trivial precondition.
@@ -108,9 +128,10 @@ export class Apriori<T> extends EventEmitter implements IAprioriEvents<T> {
 
     /**
      * Returns all combinations (itemset candidates) of size k from a given set of items.
+     *
      * @param  {T[]}    items The set of items of which you want the combinations.
      * @param  {number} k     Size of combinations you want.
-     * @return {T[]}          Array of itemset candidates.
+     * @return {Itemset<T>[]} Array of itemset candidates.
      */
     private _generateKCandidates( items: T[], k: number): Itemset<T>[] {
         // Trivial preconditions over k.
@@ -134,9 +155,10 @@ export class Apriori<T> extends EventEmitter implements IAprioriEvents<T> {
     }
 
     /**
-     * Populates an Itemset array with their support in the given set of transactions
+     * Populates an Itemset array with their support in the given set of transactions.
+     *
      * @param  {Itemset<T>[]} candidates The itemset candidates to populate with their support.
-     * @return {Itemset<T>}              The support-populated collection of itemsets.
+     * @return {Itemset<T>[]}            The support-populated collection of itemsets.
      */
     private _getCandidatesCount( candidates: Itemset<T>[] ): Itemset<T>[] {
         this._transactions.forEach( (transaction: T[]) => {
@@ -150,6 +172,7 @@ export class Apriori<T> extends EventEmitter implements IAprioriEvents<T> {
 
     /**
      * Returns the occurence of single items in a given set of transactions.
+     *
      * @param  {T[][]}      transactions The set of transaction.
      * @return {ItemsCount}              Count of items (stringified items as keys).
      */
