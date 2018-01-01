@@ -46,6 +46,8 @@ export class Apriori<T> extends EventEmitter implements IAprioriEvents<T> {
      */
     public exec( transactions: T[][], cb?: (result: IAprioriResults<T>) => any ): Promise<IAprioriResults<T>> {
         this._transactions = transactions;
+        // Relative support.
+        this._support = Math.ceil(this._support * transactions.length);
 
         return new Promise<IAprioriResults<T>>( (resolve, reject) => {
             let time = process.hrtime();
@@ -86,7 +88,7 @@ export class Apriori<T> extends EventEmitter implements IAprioriEvents<T> {
         return Object.keys(count)
             .reduce<Itemset<T>[]>( (ret: Itemset<T>[], stringifiedItem: string) => {
                 // Returning pruned one-itemsets.
-                if( count[stringifiedItem] >= transactions.length * this._support ) {
+                if( count[stringifiedItem] >= this._support ) {
                     let frequentItemset: Itemset<T> = {
                         support: count[stringifiedItem],
                         items: [JSON.parse(stringifiedItem)]
@@ -120,7 +122,7 @@ export class Apriori<T> extends EventEmitter implements IAprioriEvents<T> {
         return this._getCandidatesCount( this._generateKCandidates(items,k) )
             // Pruning candidates.
             .filter( (itemset: Itemset<T>) => {
-                let isFrequent: boolean = itemset.support >= this._transactions.length * this._support;
+                let isFrequent: boolean = itemset.support >= this._support;
                 if(isFrequent) this.emit('data', itemset);
                 return isFrequent;
             });
