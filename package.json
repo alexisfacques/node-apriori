@@ -1,6 +1,6 @@
 {
   "name": "node-apriori",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Apriori Algorithm implementation in TypeScript / JavaScript.",
   "main": "dist/apriori.js",
   "types" : "dist/apriori.d.ts",
