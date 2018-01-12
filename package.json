@@ -1,9 +1,9 @@
 {
   "name": "node-apriori",
-  "version": "0.3.2",
-  "description": "Apriori Algorithm implementation in TypeScript / JavaScript.",
+  "version": "1.0.0",
+  "description": "Apriori frequent itemset mining algorithm implementation in TypeScript / JavaScript.",
   "main": "dist/apriori.js",
-  "types" : "dist/apriori.d.ts",
+  "types": "dist/apriori.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "./node_modules/typescript/bin/tsc"
@@ -20,7 +20,8 @@
     "itemset",
     "mining",
     "association",
-    "rules"
+    "rules",
+    "data mining"
   ],
   "author": "Alexis Facques <mail@alexisfacques.com>",
   "license": "MIT",

@@ -5,10 +5,11 @@
 
 ### Performances
 
-The Apriori Algorithm is a great, easy-to-understand algorithm for frequent-itemset mining. However, faster and more memory efficient algorithms such as the [FPGrowth Algorithm](https://en.wikibooks.org/wiki/Data_Mining_Algorithms_In_R/Frequent_Pattern_Mining/The_FP-Growth_Algorithm) have been proposed since it was released.
-If you need a more efficient frequent-itemset mining algorithm implemented in Node.JS, consider checking out [Node-FPGrowth](https://github.com/alexisfacques/Node-FPGrowth).
+This implementation **does not generate k-candidates as efficiently as it possibly could**, as it adopts a brute-force approach: Every k-itemset is considered as a potential candidate, and an additional step is required to prune the unnecessary ones. [More information about this question here](http://paulallen.ca/apriori-algorithm-generating-candidate-fis/).
 
-In addition, this implementation **does not generate k-candidates as efficiently as it possibly could**, as it adopts a brute-force approach: Every k-itemset is considered as a potential candidate, and an additional step is required to prune the unnecessary ones. [More information about this question here](http://paulallen.ca/apriori-algorithm-generating-candidate-fis/).
+The Apriori Algorithm is a great, easy-to-understand algorithm for frequent-itemset mining. However, faster and more memory efficient algorithms such as the [FPGrowth Algorithm](https://en.wikibooks.org/wiki/Data_Mining_Algorithms_In_R/Frequent_Pattern_Mining/The_FP-Growth_Algorithm) have been proposed since it was released.
+
+If you need a more efficient frequent-itemset mining algorithm, **consider checking out my implementation of the [FPGrowth Algorithm](https://github.com/alexisfacques/Node-FPGrowth).**
 
 ### Installing
 
