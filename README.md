@@ -22,9 +22,9 @@ $ npm install --save node-apriori
 ```
 
 ### Example of use
+In your TypeScript project, import and use `Apriori` as follows. Same example with a JavaScript syntax is available [here](./examples/example.js).
 
 ```js
-
 import { Apriori, Itemset, IAprioriResults } from 'node-apriori';
 
 let transactions: number[][] = [
@@ -52,9 +52,26 @@ apriori.exec(transactions)
         let frequentItemsets: Itemset<number>[] = result.itemsets;
         let executionTime: number = result.executionTime;
     });
-
-
 ```
+
+### Building from source
+- Clone this repository:
+  ```bash
+  git clone https://github.com/alexisfacques/Node-Apriori.git
+  cd Node-Apriori
+  ```
+- Install the project's dependencies with `npm`:
+  ```bash
+  npm install
+  ```
+- Compile the project's sources to NodeJS executable JavaScript:
+  ```bash
+  npm run tsc
+  ```
+- This should allow you to execute the given [example](./examples/example.js) as follows:
+  ```bash
+  npm test
+  ```
 
 ## License
 
